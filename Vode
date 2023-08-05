@@ -1,0 +1,35 @@
+from telegram import Bot
+from telegram.ext import Updater, CommandHandler
+
+# Replace 'YOUR_BOT_TOKEN' with the token you received from BotFather
+bot_token = 'YOUR_BOT_TOKEN'
+
+def start(update, context):
+    update.message.reply_text("Hello! I am your group management bot.")
+
+def add_member(update, context):
+    chat_id = update.message.chat_id
+    user_id = update.message.from_user.id
+
+    # Replace 'TARGET_GROUP_ID' with the actual group ID you want to add members to
+    target_group_id = 'TARGET_GROUP_ID'
+
+    bot = context.bot
+    try:
+        bot.add_chat_member(target_group_id, user_id)
+        update.message.reply_text("You have been added to the group!")
+    except Exception as e:
+        update.message.reply_text("An error occurred while adding you to the group.")
+
+def main():
+    updater = Updater(token=bot_token, use_context=True)
+    dispatcher = updater.dispatcher
+
+    dispatcher.add_handler(CommandHandler('start', start))
+    dispatcher.add_handler(CommandHandler('addme', add_member))
+
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
